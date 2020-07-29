@@ -85,8 +85,7 @@ class User extends Authenticatable implements JWTSubject
 
     public function isGranted($role)
     {
-        if ($role === $this->role)
-        {
+        if ($role === $this->role) {
             return true;
         }
         return self::isRoleInHierarchy($role, self::ROLES_HIERARCHY[$this->role]);
@@ -95,17 +94,19 @@ class User extends Authenticatable implements JWTSubject
 
     private static function isRoleInHierarchy($role, $role_hierarchy)
     {
-        if (in_array($role, $role_hierarchy))
-        {
+        if (in_array($role, $role_hierarchy)) {
             return true;
         }
-        foreach ($role_hierarchy as $role_included)
-        {
-            if(self::isRoleInHierarchy($role, self::ROLES_HIERARCHY[$role_included]))
-            {
+        foreach ($role_hierarchy as $role_included) {
+            if (self::isRoleInHierarchy($role, self::ROLES_HIERARCHY[$role_included])) {
                 return true;
             }
         }
         return false;
+    }
+
+    public function userable()
+    {
+        return $this->morphTo();
     }
 }
