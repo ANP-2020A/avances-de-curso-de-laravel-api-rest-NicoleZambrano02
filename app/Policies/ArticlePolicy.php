@@ -3,7 +3,6 @@
 namespace App\Policies;
 
 use App\Article;
-use App\Http\Controllers\ArticleController;
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -11,27 +10,26 @@ class ArticlePolicy
 {
     use HandlesAuthorization;
 
-    public function before($user,$ability)
+    public function before(User $user, $ability)
     {
-        if($user->isGranted(User::ROLE_SUPERADMIN))
-        {
+        if ($user->isGranted(User::ROLE_SUPERADMIN)) {
             return true;
         }
     }
 
     /**
-     * Determine whether the user can view any models.
+     * Determine whether the user can view any articles.
      *
      * @param  \App\User  $user
      * @return mixed
      */
     public function viewAny(User $user)
     {
-        return true;//$user->isGranted(User::ROLE_USER);
+        return $user->isGranted(User::ROLE_USER);
     }
 
     /**
-     * Determine whether the user can view the model.
+     * Determine whether the user can view the article.
      *
      * @param  \App\User  $user
      * @param  \App\Article  $article
@@ -39,11 +37,11 @@ class ArticlePolicy
      */
     public function view(User $user, Article $article)
     {
-        return $user->isGranted(User::ROLE_ADMIN);
+        return $user->isGranted(User::ROLE_USER);
     }
 
     /**
-     * Determine whether the user can create models.
+     * Determine whether the user can create articles.
      *
      * @param  \App\User  $user
      * @return mixed
@@ -54,7 +52,7 @@ class ArticlePolicy
     }
 
     /**
-     * Determine whether the user can update the model.
+     * Determine whether the user can update the article.
      *
      * @param  \App\User  $user
      * @param  \App\Article  $article
@@ -66,7 +64,7 @@ class ArticlePolicy
     }
 
     /**
-     * Determine whether the user can delete the model.
+     * Determine whether the user can delete the article.
      *
      * @param  \App\User  $user
      * @param  \App\Article  $article
@@ -78,7 +76,7 @@ class ArticlePolicy
     }
 
     /**
-     * Determine whether the user can restore the model.
+     * Determine whether the user can restore the article.
      *
      * @param  \App\User  $user
      * @param  \App\Article  $article
@@ -90,7 +88,7 @@ class ArticlePolicy
     }
 
     /**
-     * Determine whether the user can permanently delete the model.
+     * Determine whether the user can permanently delete the article.
      *
      * @param  \App\User  $user
      * @param  \App\Article  $article
