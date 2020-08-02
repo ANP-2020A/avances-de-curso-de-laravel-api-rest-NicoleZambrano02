@@ -14,7 +14,7 @@ class AddImageColumnArticle extends Migration
     public function up()
     {
         Schema::table('articles', function (Blueprint $table) {
-            $table->string('image');
+            $table->string('image')->nullable();
         });
     }
 
