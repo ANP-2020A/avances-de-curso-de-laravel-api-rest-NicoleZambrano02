@@ -17,7 +17,7 @@ class ArticleController extends Controller
 
     public function index()
     {
-        //$this->authorize('viewAny', Article::class);
+//        $this->authorize('viewAny', Article::class);
         return new ArticleCollection(Article::paginate(10));
     }
 
@@ -34,6 +34,7 @@ class ArticleController extends Controller
     public function store(Request $request)
     {
         $this->authorize('create', Article::class);
+
         $request->validate([
             'title' => 'required|string|unique:articles|max:255',
             'body' => 'required',
@@ -56,6 +57,7 @@ class ArticleController extends Controller
     public function update(Request $request, Article $article)
     {
         $this->authorize('update', $article);
+
         $request->validate([
             'title' => 'required|string|unique:articles,title,'.$article->id.'|max:255',
             'body' => 'required',
@@ -69,6 +71,7 @@ class ArticleController extends Controller
     public function delete(Request $request, Article $article)
     {
         $this->authorize('delete', $article);
+
         $article->delete();
         return response()->json(null, 204);
     }
