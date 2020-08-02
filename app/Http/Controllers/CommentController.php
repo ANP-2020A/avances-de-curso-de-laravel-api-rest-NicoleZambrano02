@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Comment;
 use App\Article;
 use App\Http\Resources\Comment as CommentResource;
+use App\Mail\NewComment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class CommentController extends Controller
 {
@@ -30,7 +32,7 @@ class CommentController extends Controller
     public function show(Article $article, Comment $comment)
     {
         $comment = $article->comments()->where('id', $comment->id)->firstOrFail();
-        return response()->json($comment, 200);
+        return response()->json(new CommentResource($comment), 200);
     }
 
     /**
@@ -38,7 +40,7 @@ class CommentController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @param Article $article
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request, Article $article)
     {
@@ -47,14 +49,17 @@ class CommentController extends Controller
         ]);
 
         $comment = $article->comments()->save(new Comment($request->all()));
-        return response()->json($comment, 201);
+
+        Mail::to($article->user)->send(new NewComment($comment));
+
+        return response()->json(new CommentResource($comment), 201);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Comment  $comment
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Comment $comment
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Comment $comment)
@@ -65,7 +70,7 @@ class CommentController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Comment  $comment
+     * @param \App\Comment $comment
      * @return \Illuminate\Http\Response
      */
     public function delete(Comment $comment)

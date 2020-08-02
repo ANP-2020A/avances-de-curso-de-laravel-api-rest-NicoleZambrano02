@@ -1,5 +1,6 @@
 <?php
 
+use App\Admin;
 use App\Category;
 use App\User;
 use App\Writer;

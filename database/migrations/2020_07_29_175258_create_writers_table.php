@@ -17,6 +17,7 @@ class CreateWritersTable extends Migration
             $table->bigIncrements('id');
             $table->string('editorial');
             $table->text('short_bio');
+            $table->timestamps();
         });
     }
 
